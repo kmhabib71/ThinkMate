@@ -5,6 +5,7 @@ import dbConnect from "@/lib/db";
 import Note from "@/models/Note";
 import mongoose from "mongoose";
 
+// API routes with Next.js App Router - fixed type signature for Railway deployment
 // Get a specific note by ID
 export async function GET(
   request: NextRequest,
