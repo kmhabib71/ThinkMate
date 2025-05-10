@@ -1,16 +1,15 @@
-import { NextRequest, NextResponse, RouteHandler } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/lib/auth";
 import dbConnect from "@/lib/db";
 import Note from "@/models/Note";
 import mongoose from "mongoose";
 
-// API routes with Next.js App Router - fixed type signature for Railway deployment
-// Get a specific note by ID
-export const GET: RouteHandler<{ id: string }> = async (
-  request,
-  { params }
-) => {
+// Using the most basic approach for Next.js 15 App Router handlers
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     // Check if user is authenticated
     const session = await getServerSession(authConfig);
@@ -65,13 +64,13 @@ export const GET: RouteHandler<{ id: string }> = async (
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-};
+}
 
 // Update a note by ID
-export const PUT: RouteHandler<{ id: string }> = async (
-  request,
-  { params }
-) => {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     // Check if user is authenticated
     const session = await getServerSession(authConfig);
@@ -147,13 +146,13 @@ export const PUT: RouteHandler<{ id: string }> = async (
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-};
+}
 
 // Delete a note by ID
-export const DELETE: RouteHandler<{ id: string }> = async (
-  request,
-  { params }
-) => {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     // Check if user is authenticated
     const session = await getServerSession(authConfig);
@@ -206,4 +205,4 @@ export const DELETE: RouteHandler<{ id: string }> = async (
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-};
+}
