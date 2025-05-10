@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 // Get a specific note by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     // Check if user is authenticated
@@ -17,7 +17,7 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = params.id;
+    const noteId = context.params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
@@ -69,7 +69,7 @@ export async function GET(
 // Update a note by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     // Check if user is authenticated
@@ -78,7 +78,7 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = params.id;
+    const noteId = context.params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
@@ -151,7 +151,7 @@ export async function PUT(
 // Delete a note by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   try {
     // Check if user is authenticated
@@ -160,7 +160,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = params.id;
+    const noteId = context.params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
