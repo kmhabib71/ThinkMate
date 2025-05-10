@@ -5,10 +5,14 @@ import dbConnect from "@/lib/db";
 import Note from "@/models/Note";
 import mongoose from "mongoose";
 
-// Using the most basic approach for Next.js 15 App Router handlers
+type Params = {
+  id: string;
+};
+
+// Get a specific note by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Params }
 ) {
   try {
     // Check if user is authenticated
@@ -69,7 +73,7 @@ export async function GET(
 // Update a note by ID
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Params }
 ) {
   try {
     // Check if user is authenticated
@@ -151,7 +155,7 @@ export async function PUT(
 // Delete a note by ID
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Params }
 ) {
   try {
     // Check if user is authenticated
