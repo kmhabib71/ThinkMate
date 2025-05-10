@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 // Get a specific note by ID
 export async function GET(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -68,7 +68,7 @@ export async function GET(
 
 // Update a note by ID
 export async function PUT(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
@@ -84,7 +84,7 @@ export async function PUT(
     }
 
     // Parse request body
-    const { title, content } = await req.json();
+    const { title, content } = await request.json();
 
     if (!content || typeof content !== "string" || !content.trim()) {
       return NextResponse.json(
@@ -150,7 +150,7 @@ export async function PUT(
 
 // Delete a note by ID
 export async function DELETE(
-  req: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
