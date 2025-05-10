@@ -7,8 +7,8 @@ import mongoose from "mongoose";
 
 // Get a specific note by ID
 export async function GET(
-  request: NextRequest,
-  context: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
     // Check if user is authenticated
@@ -17,7 +17,7 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = context.params.id;
+    const noteId = params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
@@ -68,8 +68,8 @@ export async function GET(
 
 // Update a note by ID
 export async function PUT(
-  request: NextRequest,
-  context: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
     // Check if user is authenticated
@@ -78,13 +78,13 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = context.params.id;
+    const noteId = params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
 
     // Parse request body
-    const { title, content } = await request.json();
+    const { title, content } = await req.json();
 
     if (!content || typeof content !== "string" || !content.trim()) {
       return NextResponse.json(
@@ -150,8 +150,8 @@ export async function PUT(
 
 // Delete a note by ID
 export async function DELETE(
-  request: NextRequest,
-  context: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: { id: string } }
 ) {
   try {
     // Check if user is authenticated
@@ -160,7 +160,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = context.params.id;
+    const noteId = params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
