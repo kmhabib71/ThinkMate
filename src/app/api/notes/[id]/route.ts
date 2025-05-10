@@ -9,6 +9,16 @@ type Params = {
   id: string;
 };
 
+// Define a type for note documents
+interface NoteDocument {
+  _id: mongoose.Types.ObjectId;
+  userId: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // Get a specific note by ID
 export async function GET(
   request: NextRequest,
@@ -40,10 +50,10 @@ export async function GET(
     }
 
     // Get the note and check if it belongs to the user
-    const note = await Note.findOne({
+    const note = (await Note.findOne({
       _id: noteId,
       userId: userId,
-    }).lean();
+    }).lean()) as NoteDocument;
 
     if (!note) {
       return NextResponse.json({ error: "Note not found" }, { status: 404 });
@@ -111,7 +121,7 @@ export async function PUT(
     }
 
     // Update the note and check if it belongs to the user
-    const updatedNote = await Note.findOneAndUpdate(
+    const updatedNote = (await Note.findOneAndUpdate(
       {
         _id: noteId,
         userId: userId,
@@ -121,7 +131,7 @@ export async function PUT(
         content,
       },
       { new: true }
-    ).lean();
+    ).lean()) as NoteDocument;
 
     if (!updatedNote) {
       return NextResponse.json(

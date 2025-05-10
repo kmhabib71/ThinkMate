@@ -3,6 +3,17 @@ import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/lib/auth";
 import dbConnect from "@/lib/db";
 import Note from "@/models/Note";
+import mongoose from "mongoose";
+
+// Define a type for note documents
+interface NoteDocument {
+  _id: mongoose.Types.ObjectId;
+  userId: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -46,7 +57,7 @@ export async function POST(request: NextRequest) {
 
     console.log("Note data to save:", noteData);
 
-    const note = await Note.create(noteData);
+    const note = (await Note.create(noteData)) as NoteDocument;
 
     console.log("Note saved with ID:", note._id);
 
@@ -98,17 +109,17 @@ export async function GET(request: NextRequest) {
     console.log("Fetching notes for user:", userId);
 
     // Get notes for the user, sorted by newest first
-    const notes = await Note.find({
+    const notes = (await Note.find({
       userId: userId,
     })
       .sort({ createdAt: -1 })
       .select("title content createdAt")
-      .lean();
+      .lean()) as NoteDocument[];
 
     console.log(`Found ${notes.length} notes for user ${userId}`);
 
     // Format notes for response
-    const formattedNotes = notes.map((note: any) => ({
+    const formattedNotes = notes.map((note: NoteDocument) => ({
       id: note._id.toString(),
       title: note.title,
       content: note.content,
