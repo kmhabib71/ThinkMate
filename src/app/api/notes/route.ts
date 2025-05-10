@@ -5,7 +5,7 @@ import dbConnect from "@/lib/db";
 import Note from "@/models/Note";
 import mongoose from "mongoose";
 
-// Define a type for note documents
+// Define types for Mongoose documents
 interface NoteDocument {
   _id: mongoose.Types.ObjectId;
   userId: string;
@@ -13,6 +13,17 @@ interface NoteDocument {
   content: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+// Define a type for lean (plain JavaScript) documents
+interface LeanNoteDocument {
+  _id: any;
+  userId: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v?: number;
 }
 
 export async function POST(request: NextRequest) {
@@ -114,12 +125,12 @@ export async function GET(request: NextRequest) {
     })
       .sort({ createdAt: -1 })
       .select("title content createdAt")
-      .lean()) as NoteDocument[];
+      .lean()) as LeanNoteDocument[];
 
     console.log(`Found ${notes.length} notes for user ${userId}`);
 
     // Format notes for response
-    const formattedNotes = notes.map((note: NoteDocument) => ({
+    const formattedNotes = notes.map((note) => ({
       id: note._id.toString(),
       title: note.title,
       content: note.content,

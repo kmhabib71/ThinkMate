@@ -9,7 +9,7 @@ type Params = {
   id: string;
 };
 
-// Define a type for note documents
+// Define types for Mongoose documents
 interface NoteDocument {
   _id: mongoose.Types.ObjectId;
   userId: string;
@@ -17,6 +17,17 @@ interface NoteDocument {
   content: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+// Define a type for lean (plain JavaScript) documents
+interface LeanNoteDocument {
+  _id: any;
+  userId: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v?: number;
 }
 
 // Get a specific note by ID
@@ -53,7 +64,7 @@ export async function GET(
     const note = (await Note.findOne({
       _id: noteId,
       userId: userId,
-    }).lean()) as NoteDocument;
+    }).lean()) as LeanNoteDocument | null;
 
     if (!note) {
       return NextResponse.json({ error: "Note not found" }, { status: 404 });
@@ -131,7 +142,7 @@ export async function PUT(
         content,
       },
       { new: true }
-    ).lean()) as NoteDocument;
+    ).lean()) as LeanNoteDocument | null;
 
     if (!updatedNote) {
       return NextResponse.json(
