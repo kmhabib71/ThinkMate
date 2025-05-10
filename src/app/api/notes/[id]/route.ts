@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, RouteHandler } from "next/server";
 import { getServerSession } from "next-auth/next";
 import { authConfig } from "@/lib/auth";
 import dbConnect from "@/lib/db";
@@ -7,10 +7,10 @@ import mongoose from "mongoose";
 
 // API routes with Next.js App Router - fixed type signature for Railway deployment
 // Get a specific note by ID
-export async function GET(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export const GET: RouteHandler<{ id: string }> = async (
+  request,
+  { params }
+) => {
   try {
     // Check if user is authenticated
     const session = await getServerSession(authConfig);
@@ -18,7 +18,7 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = context.params.id;
+    const noteId = params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
@@ -65,13 +65,13 @@ export async function GET(
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-}
+};
 
 // Update a note by ID
-export async function PUT(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export const PUT: RouteHandler<{ id: string }> = async (
+  request,
+  { params }
+) => {
   try {
     // Check if user is authenticated
     const session = await getServerSession(authConfig);
@@ -79,7 +79,7 @@ export async function PUT(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = context.params.id;
+    const noteId = params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
@@ -147,13 +147,13 @@ export async function PUT(
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-}
+};
 
 // Delete a note by ID
-export async function DELETE(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export const DELETE: RouteHandler<{ id: string }> = async (
+  request,
+  { params }
+) => {
   try {
     // Check if user is authenticated
     const session = await getServerSession(authConfig);
@@ -161,7 +161,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const noteId = context.params.id;
+    const noteId = params.id;
     if (!noteId || !mongoose.Types.ObjectId.isValid(noteId)) {
       return NextResponse.json({ error: "Invalid note ID" }, { status: 400 });
     }
@@ -206,4 +206,4 @@ export async function DELETE(
 
     return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
-}
+};
